@@ -11,7 +11,7 @@ on:
 # jods.build.steps: 액션의 실제 수행 내용. 단계별로 name과 수행동작을 적어줌
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
