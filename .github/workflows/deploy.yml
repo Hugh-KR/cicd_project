@@ -7,6 +7,12 @@ on:
   push:
     branches: [ main ]
 
+env:
+  PROJECT_NAME: cicd_project
+  BUCKET_NAME: kbsat-cicd-bucket
+  CODE_DEPLOY_APP_NAME: cicdapp
+  DEPLOYMENT_GROUP_NAME: cicdapp_deploy
+
 # jobs.build.runs-on: 액션을 실행시키는 Runner의 운영체제
 # jods.build.steps: 액션의 실제 수행 내용. 단계별로 name과 수행동작을 적어줌
 jobs:
@@ -30,17 +36,18 @@ jobs:
         shell: bash
       
       - name: Make Zip File
-        run: zip -pp -r ./$GITHUB_SHA.zip .
+        run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
-      
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
+
       - name: Upload to S3
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$BUCKET_NAME/$PROJECT_NAME/$GITHUB_SHA.zip
-        
+
       - name: Code Deploy
-        run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-lacation bucket=$BUCKET_NAME, bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
+        run: aws deploy create-deployment --application-name $CODE_DEPLOY_APP_NAME --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name $DEPLOYMENT_GROUP_NAME --s3-location bucket=$BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip
