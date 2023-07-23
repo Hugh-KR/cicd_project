@@ -5,9 +5,7 @@ name: Build and Deploy Spring Boot to AWS EC2
 # on.push.branches: 해당 브랜치가 push 될 때 해당 액션을 실행한다.
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ main ]
 
 env:
   PROJECT_NAME: cicd_project
