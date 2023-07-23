@@ -9,6 +9,8 @@ JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
 
 CURRENT_PID=$(pgrep -f $APP_NAME)
 
+# 빌드된 JAR파일을 실행하는데 만약 실행이 이미 되어있다면
+# 해당 이름의 process kill하고 새 버전의 서버 프로젝트를 실행시켜준다.
 if [ -z $CURRENT_PID ]
 then
   echo "> 종료할것 없음."

@@ -2,14 +2,14 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: /home/ec2-user/cicdproject
+  - source: / # CodeDeploy agent가 s3에 받은 코드에서 어느 경로를 EC2에 다운받을지 결정
+    destination: /home/ec2-user/cicdproject # 배포될 위치
 permissions:
   - object: /home/ec2-user/cicdproject/
     owner: ec2-user
     group: ec2-user
 hooks:
-  AfterInstall:
-    - location: scripts/deploy.sh
+  AfterInstall: # CodeDeploy 수명주기 중 하나인 AfterInstall 발생 시 코드에서 scripts 폴더안에 있는 deploy.sh를 실행하라는 이벤트
+    - location: scripts/deploy.sh # deploy.sh 실행
       timeout: 60
       runas: ec2-user
